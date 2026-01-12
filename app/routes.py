@@ -74,3 +74,12 @@ def put_user(user_id):
     
     storage.update(user_id, data['name'], data['lastname'])
     return '', 204
+
+
+@users_bp.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    storage = get_storage()
+    
+    if storage.delete(user_id):
+        return '', 204
+    return jsonify({"error": "User not found"}), 400
