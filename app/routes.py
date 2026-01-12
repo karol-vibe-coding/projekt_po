@@ -62,3 +62,15 @@ def patch_user(user_id):
         lastname=data.get('lastname')
     )
     return '', 204
+
+
+@users_bp.route('/users/<int:user_id>', methods=['PUT'])
+def put_user(user_id):
+    storage = get_storage()
+    data = request.get_json()
+    
+    if not data or 'name' not in data or 'lastname' not in data:
+        return jsonify({"error": "Invalid request body"}), 400
+    
+    storage.update(user_id, data['name'], data['lastname'])
+    return '', 204
