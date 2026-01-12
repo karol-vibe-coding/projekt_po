@@ -30,3 +30,28 @@ class UserStorage:
             self._next_id = user_id + 1
         return {"id": user_id, "name": name, "lastname": lastname}
     
+    def patch(self, user_id: int, name: Optional[str] = None,
+              lastname: Optional[str] = None) -> Optional[dict]:
+        if user_id not in self._users:
+            return None
+        
+        if name is not None:
+            self._users[user_id]["name"] = name
+        if lastname is not None:
+            self._users[user_id]["lastname"] = lastname
+        
+        data = self._users[user_id]
+        return {"id": user_id, "name": data["name"], "lastname": data["lastname"]}
+    
+    def delete(self, user_id: int) -> bool:
+        if user_id in self._users:
+            del self._users[user_id]
+            return True
+        return False
+    
+    def exists(self, user_id: int) -> bool:
+        return user_id in self._users
+    
+    def clear(self) -> None:
+        self._users.clear()
+        self._next_id = 1
